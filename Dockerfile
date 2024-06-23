@@ -39,6 +39,6 @@ COPY .tmux.conf /root/.tmux.conf
 COPY .gitconfig /root/.gitconfig
 
 COPY .bashrc /root/.bashrc.tmp
-RUN curl -o /usr/share/doc/fzf/examples/key-bindings.bash https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash
+RUN curl -o /usr/share/doc/fzf/examples/key-bindings.bash https://raw.githubusercontent.com/junegunn/fzf/0.44.1/shell/key-bindings.bash
 RUN cat /root/.bashrc.tmp >> /root/.bashrc
 RUN rm /root/.bashrc.tmp
