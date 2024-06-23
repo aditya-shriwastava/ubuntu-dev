@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     vim tmux ranger neofetch curl git fzf\
     python3 python-is-python3 python3-pip python3-venv
 
-EXPOSE 5901
+EXPOSE 5902
 
 RUN mkdir /root/.vnc \
     && echo "000000" | vncpasswd -f > /root/.vnc/passwd \
