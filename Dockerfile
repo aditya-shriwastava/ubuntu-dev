@@ -8,7 +8,7 @@ WORKDIR /root
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential cmake net-tools htop vim-nox python3-dev\
+    build-essential cmake clang net-tools htop vim-nox python3-dev wget\
     xfce4 xfce4-goodies tightvncserver tigervnc-standalone-server dbus-x11 xfonts-base \
     vim tmux ranger neofetch curl git fzf\
     python3 python-is-python3 python3-pip python3-venv
@@ -27,13 +27,17 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 RUN vim -es -u ~/.vimrc -i NONE -c "PlugInstall" -c "qa"
 
-RUN apt install apt-transport-https dirmngr gnupg2 -y
+RUN apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common -y
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-RUN echo "deb https://download.mono-project.com/repo/ubuntu vs-bionic main" | tee /etc/apt/sources.list.d/mono-official-vs.list
-RUN apt update
-RUN apt install mono-complete monodevelop -y
-RUN apt install golang-go nodejs npm default-jdk default-jre -y
-RUN cd /root/.vim/plugged/YouCompleteMe/;python3 install.py --all --force-sudo
+RUN apt-add-repository 'deb https://download.mono-project.com/repo/ubuntu stable-focal main'
+RUN apt update -y
+RUN apt install mono-complete -y
+RUN wget https://golang.org/dl/go1.22.4.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.22.4.linux-amd64.tar.gz
+RUN ls /usr/local/go/bin
+RUN export PATH=$PATH:/usr/local/go/bin; go version
+RUN apt install nodejs npm default-jdk default-jre -y
+RUN cd /root/.vim/plugged/YouCompleteMe/;export PATH=$PATH:/usr/local/go/bin;python3 install.py --all --force-sudo
 
 COPY .tmux.conf /root/.tmux.conf
 COPY .gitconfig /root/.gitconfig
